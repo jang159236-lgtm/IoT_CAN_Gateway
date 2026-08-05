@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="com.nxp.s32ds.debug.ide.s32debugger.flash.core.s32DebuggerFlashProgrammerLaunchConfigurationType">
+<stringAttribute key="com.nxp.s32ds.debug.ide.s32debugger.core.clientCommands" value=""/>
+<stringAttribute key="com.nxp.s32ds.debug.ide.s32debugger.core.delayInMSeconds" value="0"/>
+<stringAttribute key="com.nxp.s32ds.debug.ide.s32debugger.core.device" value="S32K148"/>
+<booleanAttribute key="com.nxp.s32ds.debug.ide.s32debugger.core.doLaunchServer" value="true"/>
+<booleanAttribute key="com.nxp.s32ds.debug.ide.s32debugger.core.doResetAndDelay" value="false"/>
+<stringAttribute key="com.nxp.s32ds.debug.ide.s32debugger.core.initializationScriptPath" value="${S32DS_INITIALIZATION_SCRIPTS_DIR}/s32k14x/s32k14x_generic_bareboard.py"/>
+<booleanAttribute key="com.nxp.s32ds.debug.ide.s32debugger.core.isServerLogEnabled" value="false"/>
+<stringAttribute key="com.nxp.s32ds.debug.ide.s32debugger.core.jtagSpeedKHz" value="16000"/>
+<stringAttribute key="com.nxp.s32ds.debug.ide.s32debugger.core.port" value=""/>
+<stringAttribute key="com.nxp.s32ds.debug.ide.s32debugger.core.remoteTimeoutInSeconds" value="30"/>
+<stringAttribute key="com.nxp.s32ds.debug.ide.s32debugger.core.serverPortNumber" value="45000"/>
+<mapAttribute key="com.nxp.s32ds.debug.ide.s32debugger.flash.core.binaryIdToBaseAddressMap">
+<mapEntry key="0" value=""/>
+</mapAttribute>
+<mapAttribute key="com.nxp.s32ds.debug.ide.s32debugger.flash.core.binaryIdToProjectNameMap">
+<mapEntry key="0" value="S32K148_Can_Demo"/>
+</mapAttribute>
+<mapAttribute key="com.nxp.s32ds.debug.ide.s32debugger.flash.core.binaryIsEnabledMap">
+<mapEntry key="0" value="enabled"/>
+</mapAttribute>
+<mapAttribute key="com.nxp.s32ds.debug.ide.s32debugger.flash.core.projectIdToBinaryTypeMap">
+<mapEntry key="0" value="elf"/>
+</mapAttribute>
+<mapAttribute key="com.nxp.s32ds.debug.ide.s32debugger.flash.core.projectIdToBinaryMap">
+<mapEntry key="0" value="Release_FLASH/S32K148_Can_Demo.elf"/>
+</mapAttribute>
+<booleanAttribute key="com.nxp.s32ds.debug.ide.s32debugger.flash.core.verifyAfterWrite" value="false"/>
+<stringAttribute key="org.eclipse.cdt.dsf.gdb.DEBUG_NAME" value="${S32DS_GDB_ARM32_PY}"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="Release_FLASH/S32K148_Can_Demo.elf"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="S32K148_Can_Demo"/>
+</launchConfiguration>
