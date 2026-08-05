@@ -244,10 +244,25 @@ extern "C" {
 */
 #define DioConf_DioPort_DioPort_0  ((uint8)0x04U)
 /**
-* @brief          Symbolic name for the channel LED1.
+* @brief          Symbolic name for the channel LED1B.
 *
 */
-#define DioConf_DioChannel_LED1  ((uint16)0x0097U)
+#define DioConf_DioChannel_LED1B  ((uint16)0x0097U)
+/**
+* @brief          Symbolic name for the channel LED2G.
+*
+*/
+#define DioConf_DioChannel_LED2G  ((uint16)0x0096U)
+/**
+* @brief          Symbolic name for the channel LED3R.
+*
+*/
+#define DioConf_DioChannel_LED3R  ((uint16)0x0095U)
+/**
+* @brief          Symbolic name for the channel LED4Y.
+*
+*/
+#define DioConf_DioChannel_LED4Y  ((uint16)0x0094U)
 /* ---------- DioPort_1 ---------- */
 
 /**

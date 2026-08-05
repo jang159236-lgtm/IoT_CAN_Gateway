@@ -4,6 +4,8 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../RTD/src/CDD_I2c.c \
+../RTD/src/CDD_I2c_Ipw.c \
 ../RTD/src/CDD_Uart.c \
 ../RTD/src/CanIf.c \
 ../RTD/src/Can_43_FLEXCAN.c \
@@ -24,6 +26,8 @@ C_SRCS += \
 ../RTD/src/Clock_Ip_ProgFreqSwitch.c \
 ../RTD/src/Clock_Ip_Selector.c \
 ../RTD/src/Clock_Ip_Specific.c \
+../RTD/src/Dem.c \
+../RTD/src/Dem_stub.c \
 ../RTD/src/Det.c \
 ../RTD/src/Det_stub.c \
 ../RTD/src/Dio.c \
@@ -32,10 +36,13 @@ C_SRCS += \
 ../RTD/src/FlexCAN_Ip.c \
 ../RTD/src/FlexCAN_Ip_HwAccess.c \
 ../RTD/src/FlexCAN_Ip_Irq.c \
+../RTD/src/Flexio_I2c_Ip.c \
 ../RTD/src/Flexio_Uart_Ip.c \
 ../RTD/src/Flexio_Uart_Ip_Irq.c \
 ../RTD/src/Gpio_Dio_Ip.c \
 ../RTD/src/IntCtrl_Ip.c \
+../RTD/src/Lpi2c_Ip.c \
+../RTD/src/Lpi2c_Ip_Irq.c \
 ../RTD/src/Lpuart_Uart_Ip.c \
 ../RTD/src/Lpuart_Uart_Ip_Irq.c \
 ../RTD/src/Mcu.c \
@@ -65,6 +72,7 @@ C_SRCS += \
 ../RTD/src/Ram_Ip.c \
 ../RTD/src/SchM_Can_43_FLEXCAN.c \
 ../RTD/src/SchM_Dio.c \
+../RTD/src/SchM_I2c.c \
 ../RTD/src/SchM_Mcu.c \
 ../RTD/src/SchM_Platform.c \
 ../RTD/src/SchM_Port.c \
@@ -73,6 +81,8 @@ C_SRCS += \
 ../RTD/src/Uart_Ipw.c 
 
 OBJS += \
+./RTD/src/CDD_I2c.o \
+./RTD/src/CDD_I2c_Ipw.o \
 ./RTD/src/CDD_Uart.o \
 ./RTD/src/CanIf.o \
 ./RTD/src/Can_43_FLEXCAN.o \
@@ -93,6 +103,8 @@ OBJS += \
 ./RTD/src/Clock_Ip_ProgFreqSwitch.o \
 ./RTD/src/Clock_Ip_Selector.o \
 ./RTD/src/Clock_Ip_Specific.o \
+./RTD/src/Dem.o \
+./RTD/src/Dem_stub.o \
 ./RTD/src/Det.o \
 ./RTD/src/Det_stub.o \
 ./RTD/src/Dio.o \
@@ -101,10 +113,13 @@ OBJS += \
 ./RTD/src/FlexCAN_Ip.o \
 ./RTD/src/FlexCAN_Ip_HwAccess.o \
 ./RTD/src/FlexCAN_Ip_Irq.o \
+./RTD/src/Flexio_I2c_Ip.o \
 ./RTD/src/Flexio_Uart_Ip.o \
 ./RTD/src/Flexio_Uart_Ip_Irq.o \
 ./RTD/src/Gpio_Dio_Ip.o \
 ./RTD/src/IntCtrl_Ip.o \
+./RTD/src/Lpi2c_Ip.o \
+./RTD/src/Lpi2c_Ip_Irq.o \
 ./RTD/src/Lpuart_Uart_Ip.o \
 ./RTD/src/Lpuart_Uart_Ip_Irq.o \
 ./RTD/src/Mcu.o \
@@ -134,6 +149,7 @@ OBJS += \
 ./RTD/src/Ram_Ip.o \
 ./RTD/src/SchM_Can_43_FLEXCAN.o \
 ./RTD/src/SchM_Dio.o \
+./RTD/src/SchM_I2c.o \
 ./RTD/src/SchM_Mcu.o \
 ./RTD/src/SchM_Platform.o \
 ./RTD/src/SchM_Port.o \
@@ -142,6 +158,8 @@ OBJS += \
 ./RTD/src/Uart_Ipw.o 
 
 C_DEPS += \
+./RTD/src/CDD_I2c.d \
+./RTD/src/CDD_I2c_Ipw.d \
 ./RTD/src/CDD_Uart.d \
 ./RTD/src/CanIf.d \
 ./RTD/src/Can_43_FLEXCAN.d \
@@ -162,6 +180,8 @@ C_DEPS += \
 ./RTD/src/Clock_Ip_ProgFreqSwitch.d \
 ./RTD/src/Clock_Ip_Selector.d \
 ./RTD/src/Clock_Ip_Specific.d \
+./RTD/src/Dem.d \
+./RTD/src/Dem_stub.d \
 ./RTD/src/Det.d \
 ./RTD/src/Det_stub.d \
 ./RTD/src/Dio.d \
@@ -170,10 +190,13 @@ C_DEPS += \
 ./RTD/src/FlexCAN_Ip.d \
 ./RTD/src/FlexCAN_Ip_HwAccess.d \
 ./RTD/src/FlexCAN_Ip_Irq.d \
+./RTD/src/Flexio_I2c_Ip.d \
 ./RTD/src/Flexio_Uart_Ip.d \
 ./RTD/src/Flexio_Uart_Ip_Irq.d \
 ./RTD/src/Gpio_Dio_Ip.d \
 ./RTD/src/IntCtrl_Ip.d \
+./RTD/src/Lpi2c_Ip.d \
+./RTD/src/Lpi2c_Ip_Irq.d \
 ./RTD/src/Lpuart_Uart_Ip.d \
 ./RTD/src/Lpuart_Uart_Ip_Irq.d \
 ./RTD/src/Mcu.d \
@@ -203,6 +226,7 @@ C_DEPS += \
 ./RTD/src/Ram_Ip.d \
 ./RTD/src/SchM_Can_43_FLEXCAN.d \
 ./RTD/src/SchM_Dio.d \
+./RTD/src/SchM_I2c.d \
 ./RTD/src/SchM_Mcu.d \
 ./RTD/src/SchM_Platform.d \
 ./RTD/src/SchM_Port.d \
@@ -215,7 +239,7 @@ C_DEPS += \
 RTD/src/%.o: ../RTD/src/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: Standard S32DS C Compiler'
-	arm-none-eabi-gcc "@RTD/src/CDD_Uart.args" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
+	arm-none-eabi-gcc "@RTD/src/CDD_I2c.args" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

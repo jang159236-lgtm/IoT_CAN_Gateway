@@ -244,6 +244,69 @@ const Port_Ci_Port_Ip_PinSettingsConfig g_pin_mux_InitConfigArr[NUM_OF_CONFIGURE
         .passiveFilter         = (boolean)FALSE,
         .lockRegister          = PORT_LOCK_REGISTER_DISABLED,
         .digitalFilter         = (boolean)FALSE
+    },
+    {
+        .portBase              = IP_PORTE,
+        .gpioBase              = IP_PTE,
+        .pinPortIdx            = 22,
+        .mux                   = PORT_MUX_AS_GPIO,
+        .direction             = PORT_CI_PORT_PIN_OUT,
+        .pullConfig            = PORT_INTERNAL_PULL_NOT_ENABLED,
+        .driveStrength         = PORT_DRIVE_STRENGTH_LOW,
+        .passiveFilter         = (boolean)FALSE,
+        .lockRegister          = PORT_LOCK_REGISTER_DISABLED,
+        .digitalFilter         = (boolean)FALSE,
+        .initValue             = 0
+    },
+    {
+        .portBase              = IP_PORTE,
+        .gpioBase              = IP_PTE,
+        .pinPortIdx            = 21,
+        .mux                   = PORT_MUX_AS_GPIO,
+        .direction             = PORT_CI_PORT_PIN_OUT,
+        .pullConfig            = PORT_INTERNAL_PULL_NOT_ENABLED,
+        .driveStrength         = PORT_DRIVE_STRENGTH_LOW,
+        .passiveFilter         = (boolean)FALSE,
+        .lockRegister          = PORT_LOCK_REGISTER_DISABLED,
+        .digitalFilter         = (boolean)FALSE,
+        .initValue             = 0
+    },
+    {
+        .portBase              = IP_PORTE,
+        .gpioBase              = IP_PTE,
+        .pinPortIdx            = 20,
+        .mux                   = PORT_MUX_AS_GPIO,
+        .direction             = PORT_CI_PORT_PIN_OUT,
+        .pullConfig            = PORT_INTERNAL_PULL_NOT_ENABLED,
+        .driveStrength         = PORT_DRIVE_STRENGTH_LOW,
+        .passiveFilter         = (boolean)FALSE,
+        .lockRegister          = PORT_LOCK_REGISTER_DISABLED,
+        .digitalFilter         = (boolean)FALSE,
+        .initValue             = 0
+    },
+    {
+        .portBase              = IP_PORTC,
+        .gpioBase              = NULL_PTR,
+        .pinPortIdx            = 31,
+        .mux                   = PORT_MUX_ALT4,
+        .direction             = PORT_CI_PORT_PIN_IN,
+        .pullConfig            = PORT_INTERNAL_PULL_NOT_ENABLED,
+        .driveStrength         = PORT_DRIVE_STRENGTH_LOW,
+        .passiveFilter         = (boolean)FALSE,
+        .lockRegister          = PORT_LOCK_REGISTER_DISABLED,
+        .digitalFilter         = (boolean)FALSE
+    },
+    {
+        .portBase              = IP_PORTD,
+        .gpioBase              = NULL_PTR,
+        .pinPortIdx            = 19,
+        .mux                   = PORT_MUX_ALT4,
+        .direction             = PORT_CI_PORT_PIN_OUT,
+        .pullConfig            = PORT_INTERNAL_PULL_NOT_ENABLED,
+        .driveStrength         = PORT_DRIVE_STRENGTH_LOW,
+        .passiveFilter         = (boolean)FALSE,
+        .lockRegister          = PORT_LOCK_REGISTER_DISABLED,
+        .digitalFilter         = (boolean)FALSE
     }
 };
 

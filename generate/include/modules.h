@@ -216,7 +216,7 @@ extern "C" {
 /** 
 * @brief This constant used for other modules to check if I2C is present in the project.   
 */
-#define USE_I2C_MODULE              (STD_OFF)
+#define USE_I2C_MODULE              (STD_ON)
 
 /** 
 * @brief This constant used for other modules to check if I2S is present in the project.   

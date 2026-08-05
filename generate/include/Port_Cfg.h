@@ -970,7 +970,7 @@ typedef enum
 *
 */
 #define PortConf_PortPin_PortPin_CAN0_STB 0
-#define PortConf_PortPin_PortPin_151 1
+#define PortConf_PortPin_PortPin_LED1B 1
 #define PortConf_PortPin_PortPin_77 2
 #define PortConf_PortPin_PortPin_CAN0_Rx 3
 #define PortConf_PortPin_PortPin_CAN0_Tx 4
@@ -980,6 +980,11 @@ typedef enum
 #define PortConf_PortPin_PortPin_8 8
 #define PortConf_PortPin_PortPin_9 9
 #define PortConf_PortPin_PortPin_10 10
+#define PortConf_PortPin_PortPin_LED2G 11
+#define PortConf_PortPin_PortPin_LED3R 12
+#define PortConf_PortPin_PortPin_LED4Y 13
+#define PortConf_PortPin_PortPin_I2C_SDA 14
+#define PortConf_PortPin_PortPin_I2C_SCL 15
 
 /**
 * @brief Number of available pad modes options
@@ -999,12 +1004,12 @@ typedef enum
 /**
 * @brief The maximum number of configured pins
 */
-#define PORT_MAX_CONFIGURED_PADS_U16   ((uint16)11)
+#define PORT_MAX_CONFIGURED_PADS_U16   ((uint16)16)
 
 /**
  * @brief Number of UnUsed pin array
 */
-#define PORT_MAX_UNUSED_PADS_U16    (141U)
+#define PORT_MAX_UNUSED_PADS_U16    (136U)
 
 /**
 * @brief Port driver Pre-Compile configuration switch

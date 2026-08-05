@@ -17,7 +17,7 @@ void CDD_CanIf_TxConfirmation(PduIdType CanTxPduId, Std_ReturnType result)
     (void)CanTxPduId;
     (void)result;
 }
-// --- 改成这个变量名，并且暴露给 main.c 使用 ---
+
 volatile uint8 g_rx_data[8];
 volatile uint8 g_rx_flag_can1 = 0;
 volatile uint8 g_led_rx_flag = 0;
@@ -27,25 +27,35 @@ void CDD_CanIf_RxIndication(
     const PduInfoType *PduInfoPtr
 )
 {
+	if(RxPduId == 1)
+	{
+		g_rx_flag_can1 = 1;
+	 }
 	if (RxPduId == 2)
 	{
-	        if ((PduInfoPtr != NULL_PTR) && (PduInfoPtr->SduLength > 0U))
-	        {
-	            /* 约定：数据第0字节 0x01=开灯，0x00=关灯，其它可以做别的动作 */
-	            if (PduInfoPtr->SduDataPtr[0] == 0x01U)
-	            {
-	                Dio_WriteChannel(DioConf_DioChannel_LED1, STD_LOW);
-	            }
-	            else if (PduInfoPtr->SduDataPtr[0] == 0x00U)
-	            {
-	                Dio_WriteChannel(DioConf_DioChannel_LED1, STD_HIGH);
-	            }
-	        }
-    }
+		if ((PduInfoPtr != NULL_PTR) && (PduInfoPtr->SduLength >= 2U))
+	    {
+			uint8 led_index = PduInfoPtr->SduDataPtr[0];
+			uint8 state     = PduInfoPtr->SduDataPtr[1];
+			Dio_LevelType level = (state != 0U) ? STD_LOW : STD_HIGH;
 
-    // 一旦 CAN1 收到数据（RxPduId 对应 1），置标志
-    if(RxPduId == 1) {
-        g_rx_flag_can1 = 1;
+			switch (led_index) {
+			case 0U:
+				Dio_WriteChannel(DioConf_DioChannel_LED1B, level);
+				break;
+			case 1U:
+				Dio_WriteChannel(DioConf_DioChannel_LED2G, level);
+				break;
+			case 2U:
+				Dio_WriteChannel(DioConf_DioChannel_LED3R, level);
+				break;
+			case 3U:
+				Dio_WriteChannel(DioConf_DioChannel_LED4Y, level);
+			default:
+				break;
+			}
+			g_led_rx_flag = 1U;
+	        }
     }
 }
 
