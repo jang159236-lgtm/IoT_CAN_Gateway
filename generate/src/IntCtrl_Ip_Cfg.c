@@ -68,19 +68,20 @@ extern "C" {
 #include "Platform_MemMap.h"
 /* List of configurations for interrupts  */
 static const IntCtrl_Ip_IrqConfigType aIrqConfiguration[] = {
-    {CAN0_ORed_IRQn, (boolean)TRUE, 0U, &CAN0_ORED_IRQHandler},
-    {CAN0_Error_IRQn, (boolean)TRUE, 0U, &CAN0_Error_IRQHandler},
-    {CAN0_Wake_Up_IRQn, (boolean)TRUE, 0U, &CAN0_Wake_Up_IRQHandler},
-    {CAN0_ORed_0_15_MB_IRQn, (boolean)TRUE, 0U, &CAN0_ORED_0_15_MB_IRQHandler},
-    {CAN0_ORed_16_31_MB_IRQn, (boolean)TRUE, 0U, &CAN0_ORED_16_31_MB_IRQHandler},
-    {CAN1_ORed_IRQn, (boolean)TRUE, 0U, &CAN1_ORED_IRQHandler},
-    {CAN1_Error_IRQn, (boolean)TRUE, 0U, &CAN1_Error_IRQHandler},
-    {CAN1_ORed_0_15_MB_IRQn, (boolean)TRUE, 0U, &CAN1_ORED_0_15_MB_IRQHandler},
-    {CAN1_ORed_16_31_MB_IRQn, (boolean)TRUE, 0U, &CAN1_ORED_16_31_MB_IRQHandler},
+    {CAN0_ORed_IRQn, (boolean)TRUE, 5U, &CAN0_ORED_IRQHandler},
+    {CAN0_Error_IRQn, (boolean)TRUE, 5U, &CAN0_Error_IRQHandler},
+    {CAN0_Wake_Up_IRQn, (boolean)TRUE, 5U, &CAN0_Wake_Up_IRQHandler},
+    {CAN0_ORed_0_15_MB_IRQn, (boolean)TRUE, 5U, &CAN0_ORED_0_15_MB_IRQHandler},
+    {CAN0_ORed_16_31_MB_IRQn, (boolean)TRUE, 5U, &CAN0_ORED_16_31_MB_IRQHandler},
+    {CAN1_ORed_IRQn, (boolean)FALSE, 0U, &CAN1_ORED_IRQHandler},
+    {CAN1_Error_IRQn, (boolean)FALSE, 0U, &CAN1_Error_IRQHandler},
+    {CAN1_ORed_0_15_MB_IRQn, (boolean)FALSE, 0U, &CAN1_ORED_0_15_MB_IRQHandler},
+    {CAN1_ORed_16_31_MB_IRQn, (boolean)FALSE, 0U, &CAN1_ORED_16_31_MB_IRQHandler},
+    {LPI2C1_Master_IRQn, (boolean)TRUE, 8U, &LPI2C1_Master_IRQHandler},
 };
 /* Configuration structure for interrupt controller */
 const IntCtrl_Ip_CtrlConfigType intCtrlConfig = {
-    9U,
+    10U,
     aIrqConfiguration
 };
 #define PLATFORM_STOP_SEC_CONFIG_DATA_UNSPECIFIED

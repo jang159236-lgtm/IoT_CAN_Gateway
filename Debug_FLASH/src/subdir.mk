@@ -6,17 +6,20 @@
 C_SRCS += \
 ../src/CDD.c \
 ../src/Uart.c \
-../src/main.c 
+../src/main.c \
+../src/sht20.c 
 
 OBJS += \
 ./src/CDD.o \
 ./src/Uart.o \
-./src/main.o 
+./src/main.o \
+./src/sht20.o 
 
 C_DEPS += \
 ./src/CDD.d \
 ./src/Uart.d \
-./src/main.d 
+./src/main.d \
+./src/sht20.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

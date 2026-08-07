@@ -3,6 +3,7 @@
 #include "Platform_Types.h"
 #include "Dio.h"          /* 新增：LED控制需要 */
 #include "Dio_Cfg.h"      /* 新增：DioConf_DioChannel_LED1 */
+#include "CDD_I2c.h"
 
 /*void CDD_CanIf_TxConfirmation(PduIdType CanIfTxPduId, Std_ReturnType result)
 {

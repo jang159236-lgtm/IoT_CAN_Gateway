@@ -171,11 +171,12 @@ extern "C"{
 /**
 *   @brief  Hardware Buffer Address of CanController_0
 */
-static const uint32 Can_au32HwBufferAddr_Ctrl0[3U]=
+static const uint32 Can_au32HwBufferAddr_Ctrl0[4U]=
 {
     (FLEXCAN_0_BASE + (uint32)0x0080U),
     (FLEXCAN_0_BASE + (uint32)0x0100U),
-    (FLEXCAN_0_BASE + (uint32)0x0110U)
+    (FLEXCAN_0_BASE + (uint32)0x0110U),
+    (FLEXCAN_0_BASE + (uint32)0x0120U)
 };
 /**
 *   @brief  Hardware Buffer Address of CanController_1
@@ -297,6 +298,7 @@ static const uint8 Can_aHwObjIDToCtrlIDMap[CAN_43_FLEXCAN_HWOBJECT_CONFIG_COUNT]
     (uint8)1U,
     (uint8)0U,
     (uint8)1U,
+    (uint8)0U,
     (uint8)0U
 };
 
@@ -468,6 +470,37 @@ static const Can_43_FLEXCAN_HwObjectConfigType Can_aHwObjectConfig[CAN_43_FLEXCA
         (uint8)9U,
         /* Message buffer address */
         &Can_au32HwBufferAddr_Ctrl0[2U]
+    },
+    /* CanHardwareObject_Temp_Tx of CanController_0 */
+    {
+        /* Hardware Object ID */
+        (Can_HwHandleType)5U,
+        /* Hardware Object handle type */
+        CAN_43_FLEXCAN_TRANSMIT,
+        /* ID Message type */
+        CAN_43_FLEXCAN_STANDARD,
+        /* Object uses polling */
+        (boolean)FALSE,
+        /* Object enable trigger transmit */
+        (boolean)FALSE,
+        /* Number of Hw Object used in one Hoh */
+        (uint8)1U,
+        /* MainFunction RW period reference */
+        (uint8)0xFFU,
+        /* Data Payload length */
+        (uint8)8U,
+        /* Padding value */
+        (uint8)0U,
+        /* Hardware Filter Count */
+        (uint8)0U,
+        /* Hw Filter Config */
+        NULL_PTR,
+        /* Message Buffer is TX_NORMAL */
+        CAN_43_FLEXCAN_TX_NORMAL,
+        /* Buffer Index in Message buffer ram */
+        (uint8)10U,
+        /* Message buffer address */
+        &Can_au32HwBufferAddr_Ctrl0[3U]
     }
 };
 
@@ -518,11 +551,12 @@ static const Can_43_FLEXCAN_BaudrateConfigType Can_aBaudrateConfig_Ctrl0[1U]=
 /**
 *   @brief  HwObjects pointer structure of CanController_0
 */
-static const Can_43_FLEXCAN_HwObjectConfigType * const Can_apHwObject_Ctrl0[3U]=
+static const Can_43_FLEXCAN_HwObjectConfigType * const Can_apHwObject_Ctrl0[4U]=
 {
     &Can_aHwObjectConfig[0U],
     &Can_aHwObjectConfig[2U],
-    &Can_aHwObjectConfig[4U]
+    &Can_aHwObjectConfig[4U],
+    &Can_aHwObjectConfig[5U]
 };
 
 /**
@@ -618,7 +652,7 @@ static const Can_43_FLEXCAN_ControllerConfigType Can_aControllerConfig[CAN_43_FL
         /* Pointer to IPW structure to IP config */
         &Can_43_FLEXCANIpwHwChannelConfig0,
         /* Hw Object reference count */
-        (uint8)3U,
+        (uint8)4U,
         /* Pointer point to Group of Hw Object that refer to Controller */
         Can_apHwObject_Ctrl0
         #if (CAN_43_FLEXCAN_TIMESTAMP_ENABLE == STD_ON)

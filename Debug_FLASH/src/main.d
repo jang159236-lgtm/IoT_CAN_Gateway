@@ -170,7 +170,22 @@ src/main.o: ../src/main.c \
  D:/LYSTM32/S32D_W/S32K148_Can_Demo/generate/include/Lpuart_Uart_Ip_PBcfg.h \
  ../RTD/include/Lpuart_Uart_Ip_Types.h \
  D:/LYSTM32/S32D_W/S32K148_Can_Demo/generate/include/Lpuart_Uart_Ip_PBcfg.h \
- D:/LYSTM32/S32D_W/S32K148_Can_Demo/include/Uart.h
+ D:/LYSTM32/S32D_W/S32K148_Can_Demo/include/Uart.h \
+ ../RTD/include/CDD_I2c.h ../RTD/include/CDD_I2c_Types.h \
+ ../RTD/include/CDD_I2c_Ipw_Types.h ../RTD/include/Lpi2c_Ip_Types.h \
+ D:/LYSTM32/S32D_W/S32K148_Can_Demo/generate/include/Lpi2c_Ip_CfgDefines.h \
+ D:/LYSTM32/NXP/S32DS/software/PlatformSDK_S32K1_S32M24/RTD/BaseNXP_TS_T40D2M30I0R0/header/S32K148_LPI2C.h \
+ ../RTD/include/Lpi2c_Ip_Callbacks.h ../RTD/include/Lpi2c_Ip_Features.h \
+ D:/LYSTM32/S32D_W/S32K148_Can_Demo/generate/include/CDD_I2c_CfgDefines.h \
+ D:/LYSTM32/NXP/S32DS/software/PlatformSDK_S32K1_S32M24/RTD/BaseNXP_TS_T40D2M30I0R0/include/I2c_MemMap.h \
+ D:/LYSTM32/S32D_W/S32K148_Can_Demo/generate/include/CDD_I2c_Cfg.h \
+ D:/LYSTM32/S32D_W/S32K148_Can_Demo/generate/include/CDD_I2c_PBcfg.h \
+ ../RTD/include/CDD_I2c_Types.h ../RTD/include/Dem.h \
+ D:/LYSTM32/S32D_W/S32K148_Can_Demo/generate/include/Dem_IntErrId.h \
+ ../RTD/include/Dem_Types.h ../RTD/include/Rte_Dem_Type.h \
+ ../RTD/include/Dem_Types.h ../RTD/include/Rte_Dem_Type.h \
+ D:/LYSTM32/NXP/S32DS/software/PlatformSDK_S32K1_S32M24/RTD/BaseNXP_TS_T40D2M30I0R0/include/Dem_MemMap.h \
+ D:/LYSTM32/S32D_W/S32K148_Can_Demo/include/sht20.h
 D:/LYSTM32/NXP/S32DS/software/PlatformSDK_S32K1_S32M24/RTD/BaseNXP_TS_T40D2M30I0R0/header/S32K148.h:
 D:/LYSTM32/NXP/S32DS/software/PlatformSDK_S32K1_S32M24/RTD/BaseNXP_TS_T40D2M30I0R0/header/S32K148_ADC.h:
 D:/LYSTM32/NXP/S32DS/software/PlatformSDK_S32K1_S32M24/RTD/BaseNXP_TS_T40D2M30I0R0/header/S32K148_COMMON.h:
@@ -355,3 +370,24 @@ D:/LYSTM32/S32D_W/S32K148_Can_Demo/generate/include/Lpuart_Uart_Ip_PBcfg.h:
 ../RTD/include/Lpuart_Uart_Ip_Types.h:
 D:/LYSTM32/S32D_W/S32K148_Can_Demo/generate/include/Lpuart_Uart_Ip_PBcfg.h:
 D:/LYSTM32/S32D_W/S32K148_Can_Demo/include/Uart.h:
+../RTD/include/CDD_I2c.h:
+../RTD/include/CDD_I2c_Types.h:
+../RTD/include/CDD_I2c_Ipw_Types.h:
+../RTD/include/Lpi2c_Ip_Types.h:
+D:/LYSTM32/S32D_W/S32K148_Can_Demo/generate/include/Lpi2c_Ip_CfgDefines.h:
+D:/LYSTM32/NXP/S32DS/software/PlatformSDK_S32K1_S32M24/RTD/BaseNXP_TS_T40D2M30I0R0/header/S32K148_LPI2C.h:
+../RTD/include/Lpi2c_Ip_Callbacks.h:
+../RTD/include/Lpi2c_Ip_Features.h:
+D:/LYSTM32/S32D_W/S32K148_Can_Demo/generate/include/CDD_I2c_CfgDefines.h:
+D:/LYSTM32/NXP/S32DS/software/PlatformSDK_S32K1_S32M24/RTD/BaseNXP_TS_T40D2M30I0R0/include/I2c_MemMap.h:
+D:/LYSTM32/S32D_W/S32K148_Can_Demo/generate/include/CDD_I2c_Cfg.h:
+D:/LYSTM32/S32D_W/S32K148_Can_Demo/generate/include/CDD_I2c_PBcfg.h:
+../RTD/include/CDD_I2c_Types.h:
+../RTD/include/Dem.h:
+D:/LYSTM32/S32D_W/S32K148_Can_Demo/generate/include/Dem_IntErrId.h:
+../RTD/include/Dem_Types.h:
+../RTD/include/Rte_Dem_Type.h:
+../RTD/include/Dem_Types.h:
+../RTD/include/Rte_Dem_Type.h:
+D:/LYSTM32/NXP/S32DS/software/PlatformSDK_S32K1_S32M24/RTD/BaseNXP_TS_T40D2M30I0R0/include/Dem_MemMap.h:
+D:/LYSTM32/S32D_W/S32K148_Can_Demo/include/sht20.h:

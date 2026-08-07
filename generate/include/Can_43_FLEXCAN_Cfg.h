@@ -252,7 +252,7 @@ extern "C"{
 /**
 *   @brief      Number Of HardwareObject Config
 */
-#define CAN_43_FLEXCAN_HWOBJECT_CONFIG_COUNT    ((Can_HwHandleType)5U)
+#define CAN_43_FLEXCAN_HWOBJECT_CONFIG_COUNT    ((Can_HwHandleType)6U)
 
 /**
 *   @brief      Symbolic Name generated for Can Controller
@@ -267,6 +267,7 @@ extern "C"{
 #define Can_43_FLEXCANConf_CanHardwareObject_CanHardwareObject_CAN0_Tx    ((Can_HwHandleType)2U)
 #define Can_43_FLEXCANConf_CanHardwareObject_CanHardwareObject_CAN1_Tx    ((Can_HwHandleType)3U)
 #define Can_43_FLEXCANConf_CanHardwareObject_CanHardwareObject_LED_Rx    ((Can_HwHandleType)4U)
+#define Can_43_FLEXCANConf_CanHardwareObject_CanHardwareObject_Temp_Tx    ((Can_HwHandleType)5U)
 /**
 *   @brief      Enable/Disable support  Can_CheckWakeup API
 */

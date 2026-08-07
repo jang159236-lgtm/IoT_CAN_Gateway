@@ -123,3 +123,4 @@
 "./src/CDD.o"
 "./src/Uart.o"
 "./src/main.o"
+"./src/sht20.o"

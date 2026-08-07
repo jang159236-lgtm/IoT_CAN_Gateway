@@ -81,6 +81,7 @@ extern void CAN1_ORED_IRQHandler(void);
 extern void CAN1_Error_IRQHandler(void);
 extern void CAN1_ORED_0_15_MB_IRQHandler(void);
 extern void CAN1_ORED_16_31_MB_IRQHandler(void);
+extern void LPI2C1_Master_IRQHandler(void);
 #if  (PLATFORM_IP_ENABLE_INT_CTRL == STD_ON)
     #if (INT_CTRL_IP_CORTEXR == STD_ON)
     #if (defined(INT_CTRL_CORE_SPECIFIC_VTABLE) && (INT_CTRL_CORE_SPECIFIC_VTABLE == STD_ON))

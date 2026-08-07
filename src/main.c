@@ -46,6 +46,9 @@
 #include "Lpuart_Uart_Ip.h"
 #include "Lpuart_Uart_Ip_PBcfg.h"
 #include "Uart.h"
+#include "CDD_I2c.h"
+#include "sht20.h"
+
 
 extern Port_Ci_Port_Ip_PinSettingsConfig g_pin_mux_InitConfigArr_PortContainer_0_BOARD_InitPeripherals[];
 extern uint32 NUM_OF_CONFIGURED_PINS_PortContainer_0_BOARD_InitPeripherals;
@@ -75,6 +78,8 @@ uint8 CAN0_msg[8] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08};
 uint8 CAN1_msg[8] = {0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18};
 extern volatile uint8 g_rx_flag_can1;
 extern volatile uint8 g_led_rx_flag;
+
+float temp = 0.0f, humi = 0.0f;
 
 volatile uint8 g_tx_confirm_count = 0;
 
@@ -111,6 +116,7 @@ int main(void)
     CanIf_Init(NULL_PTR);
 
     Can_43_FLEXCAN_SetControllerMode(Can_43_FLEXCANConf_CanController_CanController_0, CAN_CS_STARTED);
+    I2c_Init(&I2c_Config);
 
     Can_ControllerStateType state;
     do
@@ -119,26 +125,25 @@ int main(void)
     }
     while (state != CAN_CS_STARTED);
 
-
-    PduInfoType PduInfoCAN0 =
+   PduInfoType PduInfoCAN0 =
     {
         .SduDataPtr = CAN0_msg,
         .SduLength = 8
     };
 
-
     for(;;)
     {
     	CDD_CanTransmit(CanIfTxPduCfg_0, CAN0_msg, 8);
-    	if (g_led_rx_flag == 1U)
-    	{
-    		g_led_rx_flag = 0U;
-    	}
+		if (g_led_rx_flag == 1U) {
+			g_led_rx_flag = 0U;
+		}
+		if (SHT2x_ReadTemperature(&temp) && SHT2x_ReadHumidity(&humi)) {
+			App_SendSensorReport(temp, humi);
+		}
     	Can_43_FLEXCAN_MainFunction_Write();
     	delay(500000);
     	printf("UART debug OK\r\n");
      }
-
     return exit_code;
 
 }

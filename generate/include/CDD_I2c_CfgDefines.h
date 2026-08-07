@@ -97,7 +97,7 @@ extern "C"
 /**
 * @brief            TIMEOUT for sync transmissions
 */
-#define I2C_TIMEOUT (1U)
+#define I2C_TIMEOUT (10000U)
 
 /**
 * @brief   Switches the Development Error Detection and Notification ON or OFF.
