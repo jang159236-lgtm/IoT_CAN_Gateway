@@ -1,10 +1,3 @@
-/*
- * CDD.h
- *
- *  Created on: 2026年7月10日
- *      Author: liuyi
- */
-
 #ifndef CDD_H_
 #define CDD_H_
 

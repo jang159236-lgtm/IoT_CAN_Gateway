@@ -15,9 +15,9 @@ static Std_ReturnType SHT2x_SendCommand(uint8 cmd)
 
     printf("  [Debug] Sending Cmd: 0x%02X to Addr: 0x40...\r\n", cmd);
 
-    req.SlaveAddress          = 0x40U;          /* SHT20 的 7 位地址 */
-    req.BitsSlaveAddressSize  = FALSE;          /* 7 位地址模式 */
-    req.ExpectNack            = FALSE;          /* 正常等待 ACK */
+    req.SlaveAddress          = 0x40U;
+    req.BitsSlaveAddressSize  = FALSE;
+    req.ExpectNack            = FALSE;
     req.RepeatedStart         = FALSE;
     req.BufferSize            = 1U;
     req.DataDirection         = I2C_SEND_DATA;
@@ -32,25 +32,9 @@ static Std_ReturnType SHT2x_SendCommand(uint8 cmd)
 
     return ret;
 }
-/*
-static Std_ReturnType SHT2x_SendCommand(uint8 cmd)
-{
-    I2c_RequestType req;
-    uint8 cmdBuf[1] = { cmd };
 
-    req.SlaveAddress          = SHT2X_I2C_ADDR;
-    req.BitsSlaveAddressSize  = FALSE;       7位地址
-    req.ExpectNack            = TRUE;
-    req.RepeatedStart         = FALSE;       发完命令直接STOP，等测量完成后再单独START读
-    req.BufferSize            = 1U;
-    req.DataDirection         = I2C_SEND_DATA;
-    req.DataBuffer            = cmdBuf;
 
-    return I2c_SyncTransmit(I2cConf_I2cChannel_I2cChannel_0, &req);
-}
-*/
-
-/* 从SHT2x读回2字节原始数据（不校验CRC，先跑通功能） */
+/* 从SHT2x读回2字节原始数据 */
 static Std_ReturnType SHT2x_ReadData(uint8 *outBuf2Bytes)
 {
     I2c_RequestType req;
@@ -78,8 +62,7 @@ boolean SHT2x_ReadTemperature(float *outTemp)
         return FALSE;
     }
 
-    /* No Hold模式下，温度测量典型耗时约66~85ms，这里保守多等一会
-     * 具体延时数值要按你系统时钟实测校准，不同主频下delay(count)对应的实际时间不同 */
+    /* No Hold模式下，温度测量典型耗时约66~85ms*/
     delay(4000000U);
 
     if (E_OK != SHT2x_ReadData(raw))
@@ -133,5 +116,5 @@ void App_SendSensorReport(float temp, float humi)
     buf[2] = (uint8)(humi_int >> 8);
     buf[3] = (uint8)(humi_int & 0xFF);
 
-    CDD_CanTransmit(CanIfTxPduCfg_2 /* 需要在.mex里新建一条TxPdu，ID填0x122 */, buf, 8);
+    CDD_CanTransmit(CanIfTxPduCfg_2 , buf, 8);
 }

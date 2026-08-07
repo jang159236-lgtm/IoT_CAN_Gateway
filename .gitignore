@@ -1,0 +1,35 @@
+#======== S32DS AUTOSAR RTD 编译输出 全部忽略 ========
+Debug_*/
+Binaries/
+
+#======== RTD自动生成输出代码（配置mex重新generate即可复现） ========
+generate/src/
+generate/include/
+
+#======== IDE本地用户配置（窗口布局、断点、本机路径） ========
+.metadata/
+.settings/
+*.launch
+*.user
+*.bak
+
+#======== 编译中间文件、烧录固件 ========
+*.elf
+*.s19
+*.hex
+*.map
+*.o
+*.obj
+*.lst
+
+#======== 系统杂项 ========
+.DS_Store
+Thumbs.db
+
+#======== 保留：不要忽略RTD配置源文件、时钟yaml、mex工程文件 ========
+!S32K148.mex
+!ClockYaml.txt
+!ClockConfigurationMappings.txt
+!RTD/
+!board/
+!Project_Settings/
