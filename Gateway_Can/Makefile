@@ -1,25 +1,21 @@
-CC=/opt/buildroot/cortexA7/bin/arm-linux-gcc
-APP_NAME=spi_test
+CC = gcc
+CFLAGS = -Wall -Wextra -I./include -std=c99
+LDFLAGS = -lmosquitto -lm
 
-all:clean
-	@${CC} ${APP_NAME}.c -o ${APP_NAME}
-	${CC} ttyS_test.c -o ttyS_test -lpthread
-	${CC} can_test.c -o can_test
-	${CC} lcd_test.c -o lcd_test
-	${CC} can_gs.c -o can_gs
-	${CC} Can_mqtt.c -o Can_mqtt -lmosquitto -lpthread
-	${CC} Can_V2.c cJSON.c -o Can_V2 -lmosquitto -lpthread
-	${CC} Can.c cJSON.c -o Can -lmosquitto -lpthread
+TARGET = can_bridge
+SRCS = src/main.c src/can_socket.c src/mqtt_handler.c src/json_parser.c src/cJSON.c
+OBJS = $(SRCS:.c=.o)
+HEADERS = include/can_bridge.h include/cJSON.h
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+src/%.o: src/%.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@rm -f ${APP_NAME}
-	@rm -f ttyS_test
-	@rm -f can_test
-	@rm -f lcd_test
-	@rm -f can_gs
-	@rm -f Can_mqtt
-	@rm -f Can_V2
-	@rm -f Can
+	rm -f $(OBJS) $(TARGET)
 
-install:
-	cp ${APP_NAME} ~/linux/tftp/
+.PHONY: all clean
