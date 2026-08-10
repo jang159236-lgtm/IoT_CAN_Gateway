@@ -14,6 +14,8 @@
 
 #include <mosquitto.h>
 
+#include "cJSON.h"
+
 /* ==================== CAN 协议定义（跟单片机对齐）==================== */
 #define CAN_ID_SENSOR_REPORT 0x122u   /* 单片机 -> 开发板：温湿度上报，大端序  */
 #define CAN_ID_LED_CONTROL   0x100u   /* 开发板 -> 单片机：LED 控制，data[0]=状态(0/1) 下发命令:{"led":0,"state":0} */
@@ -106,32 +108,16 @@ static void send_led_command(uint8_t led_index, uint8_t state)
 }
 
 /* ---------------------------------------------------------------------
- * 提取指令
+ * 提取指令（使用 cJSON 解析）
  * ------------------------------------------------------------------- */
-static int json_get_int(const char *json, const char *key, long *out)
+static int json_get_int(const cJSON *root, const char *key, long *out)
 {
-	char pattern[64];
-	const char *p;
-	snprintf(pattern, sizeof(pattern), "\"%s\"", key);
-
-	p = strstr(json, pattern);
-	if (!p) {
-		return -1;
-	}
-	p += strlen(pattern);
-
-	/* 跳过冒号和空白 */
-	while (*p == ' ' || *p == '\t' || *p == ':') {
-		p++;
+	const cJSON *item = cJSON_GetObjectItemCaseSensitive(root, key);
+	if (!cJSON_IsNumber(item)) {
+		return -1;   /* 字段不存在或不是数字 */
 	}
 
-	char *endptr;
-	long val = strtol(p, &endptr, 10);
-	if (endptr == p) {
-		return -1;   /* 没解析出数字 */
-	}
-
-	*out = val;
+	*out = (long)item->valuedouble;
 	return 0;
 }
 
@@ -181,13 +167,21 @@ static void on_message(struct mosquitto *mosq, void *userdata,
 
 	printf("[MQTT RX] topic=%s payload=%s\n", msg->topic, buf);
 
+	cJSON *root = cJSON_Parse(buf);
+	if (root == NULL) {
+		const char *err = cJSON_GetErrorPtr();
+		fprintf(stderr, "[WARN] JSON解析失败，忽略消息: %s\n", err ? err : "未知错误");
+		return;
+	}
+
 	if (strcmp(msg->topic, TOPIC_LED_SUB) == 0) {
 		long led = 0, state = 0;
-		int has_led   = (json_get_int(buf, "led", &led) == 0);
-		int has_state = (json_get_int(buf, "state", &state) == 0);
+		int has_led   = (json_get_int(root, "led", &led) == 0);
+		int has_state = (json_get_int(root, "state", &state) == 0);
 
 		if (!has_state) {
 			fprintf(stderr, "[WARN] LED控制消息缺少 state 字段，忽略: %s\n", buf);
+			cJSON_Delete(root);
 			return;
 		}
 		if (!has_led) {
@@ -199,13 +193,16 @@ static void on_message(struct mosquitto *mosq, void *userdata,
 	else if (strcmp(msg->topic, TOPIC_SERVO_SUB) == 0) 
 	{
 		long angle = 0;
-		if (json_get_int(buf, "angle", &angle) != 0) 
+		if (json_get_int(root, "angle", &angle) != 0) 
 		{
 			fprintf(stderr, "[WARN] 舵机控制消息缺少 angle 字段，忽略: %s\n", buf);
+			cJSON_Delete(root);
 			return;
 		}
 		send_servo_command((uint8_t)angle);
 	}
+
+	cJSON_Delete(root);
 }
 
 /* ---------------------------------------------------------------------
@@ -228,17 +225,30 @@ static void handle_can_frame(const struct can_frame *frame)
 	double temperature = raw_temp / 100.0;
 	double humidity    = raw_humi / 100.0;
 
-	char payload[128];
-	int n = snprintf(payload, sizeof(payload),
-			"{\"temperature\":%.2f,\"humidity\":%.2f}",
-			temperature, humidity);
+	cJSON *root = cJSON_CreateObject();
+	if (root == NULL) {
+		fprintf(stderr, "[WARN] cJSON_CreateObject 失败\n");
+		return;
+	}
+	cJSON_AddNumberToObject(root, "temperature", temperature);
+	cJSON_AddNumberToObject(root, "humidity", humidity);
 
-	int rc = mosquitto_publish(g_mosq, NULL, TOPIC_SENSOR_PUB, n, payload, 0, false);
+	char *payload = cJSON_PrintUnformatted(root);
+	if (payload == NULL) {
+		fprintf(stderr, "[WARN] cJSON_PrintUnformatted 失败\n");
+		cJSON_Delete(root);
+		return;
+	}
+
+	int rc = mosquitto_publish(g_mosq, NULL, TOPIC_SENSOR_PUB, (int)strlen(payload), payload, 0, false);
 	if (rc != MOSQ_ERR_SUCCESS) {
 		fprintf(stderr, "[MQTT] 发布失败: %s\n", mosquitto_strerror(rc));
 	} else {
 		printf("[MQTT TX] topic=%s payload=%s\n", TOPIC_SENSOR_PUB, payload);
 	}
+
+	cJSON_free(payload);
+	cJSON_Delete(root);
 }
 
 /* ---------------------------------------------------------------------
@@ -363,3 +373,4 @@ int main(int argc, char **argv)
 
 	return 0;
 }
+
