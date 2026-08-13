@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAN车载网关监控终端</title>
+<script src="https://cdn.jsdelivr.net/npm/mqtt@4.3.7/dist/mqtt.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Microsoft YaHei,sans-serif;}
+body{
+    background:#070a0f;
+    color:#d0d8e3;
+    padding:24px;
+    background-image:radial-gradient(#141a24 1px,transparent 1px);
+    background-size:24px 24px;
+}
+.wrap{
+    max-width:1920px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:62% 36%;
+    gap:2%;
+    grid-template-rows:auto auto;
+    grid-template-areas:
+    "sensor panel"
+    "log log";
+}
+@media (max-width:1200px){
+.wrap{grid-template-columns:1fr;grid-template-areas:"sensor""panel""log";}
+}
+.card{
+    background:#0c1118;
+    border:1px solid #1f2937;
+    border-radius:16px;
+    padding:22px;
+    margin-bottom:18px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    position:relative;
+    overflow:hidden;
+}
+.card::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;right:0;
+    height:1px;
+    background: linear-gradient(90deg, transparent,#2d3b52,transparent);
+}
+.card-head{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:18px;
+    align-items:center;
+}
+.card-title{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    font-size:16px;
+    color:#e2eaf5;
+    letter-spacing:0.5px;
+}
+.topic-text{
+    font-size:12px;
+    color:#64748b;
+    font-family:Consolas;
+}
+.dot-online{
+    width:9px;height:9px;
+    border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 8px #22c55e;
+}
+/* 传感器区域 */
+.card-sensor{grid-area:sensor;}
+.data-display{display:flex;gap:70px;margin-bottom:22px;}
+.val-row{
+    display:flex;
+    align-items:flex-end;
+    gap:12px;
+}
+.val-num{
+    font-size:64px;
+    font-weight:400;
+    color:#e2eaf5;
+    letter-spacing:1px;
+}
+.val-unit{
+    font-size:26px;
+    font-weight:400;
+    color:#60a5fa;
+    padding-bottom:12px;
+}
+.chart-box{height:200px;}
+/* 右侧控制面板 */
+.card-panel{grid-area:panel;}
+.light-group{
+    display:grid;
+    grid-template-columns: repeat(4,1fr);
+    gap:12px;
+    margin-bottom:26px;
+}
+.light-btn{
+    text-align:center;
+    padding:18px 0;
+    border-radius:12px;
+    background:#111823;
+    border:1px solid #1f2937;
+    cursor:pointer;
+    transition:0.24s ease;
+}
+.light-btn:hover{
+    background:#161e2b;
+    border-color:#334155;
+}
+.light-dot{
+    width:40px;height:40px;
+    border-radius:50%;
+    margin:0 auto 10px;
+    transition:0.3s;
+}
+/* 灯底色与激活发光 */
+.dot-red{background:#381618;}
+.dot-red.active{background:#ef4444;box-shadow:0 0 18px #ef4444,0 0 32px rgba(239,68,68,0.4);}
+
+.dot-yellow{background:#383012;}
+.dot-yellow.active{background:#facc15;box-shadow:0 0 18px #facc15,0 0 32px rgba(250,204,21,0.4);}
+
+.dot-green{background:#132e22;}
+.dot-green.active{background:#22c55e;box-shadow:0 0 18px #22c55e,0 0 32px rgba(34,197,94,0.4);}
+
+.dot-blue{background:#122538;}
+.dot-blue.active{background:#3b82f6;box-shadow:0 0 18px #3b82f6,0 0 32px rgba(59,130,246,0.4);}
+
+.servo-area{margin-top:24px;}
+.gauge-box{
+    height:140px;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+#servo-gauge{width:100%;max-width:240px;}
+.slider-wrap{margin-top:14px;}
+#servo-slider{
+    width:100%;
+    accent-color:#fb923c;
+    height:7px;
+    border-radius:4px;
+}
+.angle-show{
+    text-align:center;
+    margin:10px 0;
+    font-size:30px;
+    color:#fb923c;
+    letter-spacing:1px;
+}
+/* MQTT日志 */
+.card-log{grid-area:log;}
+.log-header{display:flex;gap:14px;margin-bottom:12px;justify-content:flex-end;flex-wrap:wrap;}
+.tag{font-size:12px;padding:3px 9px;border-radius:6px;}
+.tag-sub{background:#133836;color:#5eead4;}
+.tag-pub{background:#3c3219;color:#fcd34d;}
+.tag-sys{background:#1f2937;color:#94a3b8;}
+#log-text{
+    height:230px;
+    overflow-y:auto;
+    background:#080c12;
+    border-radius:10px;
+    padding:14px;
+    font-family:Consolas,monospace;
+    font-size:13px;
+    line-height:1.7;
+    color:#94a3b8;
+    white-space:pre;
+    border:1px solid #182230;
+}
+#log-text::-webkit-scrollbar{width:6px;}
+#log-text::-webkit-scrollbar-thumb{background:#2c3848;border-radius:3px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+    <!-- 左上 温湿度传感器 -->
+    <div class="card card-sensor">
+        <div class="card-head">
+            <div class="card-title"><span class="dot-online"></span>SHT20 温湿度遥测</div>
+            <span class="topic-text">device/igkboard/sensor</span>
+        </div>
+        <div class="data-display">
+            <div class="val-row">
+                <span class="val-num" id="temp-val">--</span>
+                <span class="val-unit">℃</span>
+            </div>
+            <div class="val-row">
+                <span class="val-num" id="humi-val">--</span>
+                <span class="val-unit">%RH</span>
+            </div>
+        </div>
+        <div class="chart-box">
+            <canvas id="sensorChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 右上 四色灯 + 舵机仪表盘 -->
+    <div class="card card-panel">
+        <div class="card-head">
+            <div class="card-title">LED 灯光控制</div>
+            <span class="topic-text">device/igkboard/led/set</span>
+        </div>
+        <div class="light-group">
+            <div class="light-btn" onclick="toggleLed(2)">
+                <div class="light-dot dot-red" id="led-red"></div>
+                <div>红灯</div>
+            </div>
+            <div class="light-btn" onclick="toggleLed(3)">
+                <div class="light-dot dot-yellow" id="led-yellow"></div>
+                <div>黄灯</div>
+            </div>
+            <div class="light-btn" onclick="toggleLed(1)">
+                <div class="light-dot dot-green" id="led-green"></div>
+                <div>绿灯</div>
+            </div>
+            <div class="light-btn" onclick="toggleLed(0)">
+                <div class="light-dot dot-blue" id="led-blue"></div>
+                <div>蓝灯</div>
+            </div>
+        </div>
+
+        <div class="card-head">
+            <div class="card-title">舵机角度控制</div>
+            <span class="topic-text">device/igkboard/servo/set</span>
+        </div>
+        <div class="servo-area">
+            <div class="gauge-box">
+                <canvas id="servo-gauge"></canvas>
+            </div>
+            <div class="angle-show"><span id="angle-val">90</span> °</div>
+            <div class="slider-wrap">
+                <input type="range" min="0" max="180" value="90" id="servo-slider">
+            </div>
+        </div>
+    </div>
+
+    <!-- 下方 MQTT 收发日志 -->
+    <div class="card card-log">
+        <div class="card-head">
+            <div class="card-title">MQTT 收发日志</div>
+            <div class="log-header">
+                <span class="tag tag-sub">SUB 订阅接收</span>
+                <span class="tag tag-pub">PUB 发布指令</span>
+                <span class="tag tag-sys">SYS 系统信息</span>
+            </div>
+        </div>
+        <div id="log-text"></div>
+    </div>
+</div>
+
+<script>
+// ===================== 【配置区，和网关保持一致】 =====================
+const EMQX_IP = "116.62.215.108";
+const WS_PORT = 8083;
+const TOPIC_SENSOR = "device/igkboard/sensor";
+const TOPIC_LED    = "device/igkboard/led/set";
+const TOPIC_SERVO  = "device/igkboard/servo/set";
+
+// led_index 与底层硬件严格对应
+// 0 → 蓝灯LED1B
+// 1 → 绿灯LED2G
+// 2 → 红灯LED3R
+// 3 → 黄灯LED4Y
+let ledState = [0,0,0,0];
+// UI元素顺序：红灯、黄灯、绿灯、蓝灯
+const ledDomIds = ["led-red","led-yellow","led-green","led-blue"];
+
+let chartData = {temp:[],humi:[],time:[]};
+const MAX_POINT = 40;
+
+// MQTT连接
+const mqttUrl = `ws://${EMQX_IP}:${WS_PORT}/mqtt`;
+const clientId = `web_igk_${Math.floor(Math.random()*999999)}`;
+const client = mqtt.connect(mqttUrl,{clientId,clean:true});
+
+// 日志打印函数
+function addLog(type,text){
+    const now = new Date().toLocaleTimeString();
+    const logDom = document.getElementById("log-text");
+    let tag = "";
+    if(type==="SUB") tag="【SUB】";
+    else if(type==="PUB") tag="【PUB】";
+    else tag="【SYS】";
+    logDom.innerHTML += `${now} ${tag} ${text}\n`;
+    logDom.scrollTop = logDom.scrollHeight;
+}
+
+// ============ 温湿度曲线图初始化（车载深色风格） ============
+const chartCtx = document.getElementById("sensorChart").getContext("2d");
+const sensorChart = new Chart(chartCtx,{
+    type:"line",
+    options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{labels:{color:"#d0d8e3"}}},
+        scales:{
+            x:{grid:{color:"#1f2937"},ticks:{color:"#818cf880"}},
+            y:{grid:{color:"#1f2937"},ticks:{color:"#818cf880"}}
+        }
+    },
+    data:{
+        labels:[],
+        datasets:[
+            {label:"温度 ℃",data:[],borderColor:"#60a5fa",tension:0.3,pointRadius:0,borderWidth:2},
+            {label:"湿度 %RH",data:[],borderColor:"#fb923c",tension:0.3,pointRadius:0,borderWidth:2}
+        ]
+    }
+});
+
+// ============ 舵机仪表盘Canvas（车载仪表优化） ============
+const gaugeCanvas = document.getElementById("servo-gauge");
+const gCtx = gaugeCanvas.getContext("2d");
+gaugeCanvas.width = 340;
+gaugeCanvas.height = 150;
+function drawGauge(angle){
+    gCtx.clearRect(0,0,340,150);
+    const cx = 170,cy=130,r=105;
+    // 背景圆弧
+    gCtx.beginPath();
+    gCtx.arc(cx,cy,r,Math.PI,0);
+    gCtx.strokeStyle="#1f2937";gCtx.lineWidth=14;gCtx.stroke();
+    // 有效圆弧
+    gCtx.beginPath();
+    const radStart = Math.PI;
+    const radEnd = Math.PI - (angle/180)*Math.PI;
+    gCtx.arc(cx,cy,r,radStart,radEnd);
+    gCtx.strokeStyle="#fb923c";gCtx.lineWidth=14;gCtx.stroke();
+    // 指针
+    gCtx.beginPath();
+    const px = cx + r*Math.cos(radEnd);
+    const py = cy + r*Math.sin(radEnd);
+    gCtx.moveTo(cx,cy);gCtx.lineTo(px,py);
+    gCtx.strokeStyle="#ffffff";gCtx.lineWidth=3;gCtx.stroke();
+    gCtx.beginPath();
+    gCtx.arc(px,py,7,0,Math.PI*2);
+    gCtx.fillStyle="#fff";gCtx.fill();
+    // 中心圆点
+    gCtx.beginPath();
+    gCtx.arc(cx,cy,5,0,Math.PI*2);
+    gCtx.fillStyle="#94a3b8";gCtx.fill();
+}
+drawGauge(90);
+
+// ============ MQTT回调 ============
+client.on("connect",()=>{
+    addLog("SYS","MQTT成功连接EMQX服务器");
+    client.subscribe(TOPIC_SENSOR);
+});
+client.on("close",()=>addLog("SYS","连接断开，等待重连"));
+client.on("error",(e)=>addLog("SYS","连接异常:"+e.message));
+
+client.on("message",(topic,payload)=>{
+    const msg = payload.toString();
+    addLog("SUB",`${topic} ${msg}`);
+    if(topic === TOPIC_SENSOR){
+        try{
+            const d = JSON.parse(msg);
+            document.getElementById("temp-val").innerText = d.temperature;
+            document.getElementById("humi-val").innerText = d.humidity;
+            // 更新曲线
+            const t = new Date().toLocaleTimeString();
+            chartData.time.push(t);
+            chartData.temp.push(d.temperature);
+            chartData.humi.push(d.humidity);
+            if(chartData.time.length > MAX_POINT){
+                chartData.time.shift();chartData.temp.shift();chartData.humi.shift();
+            }
+            sensorChart.data.labels = chartData.time;
+            sensorChart.data.datasets[0].data = chartData.temp;
+            sensorChart.data.datasets[1].data = chartData.humi;
+            sensorChart.update("none");
+        }catch(err){console.log(err);}
+    }
+});
+
+// ============ LED四色灯【协议 {led:编号, state:0/1}】 ============
+function toggleLed(num){
+    if(!client.connected){alert("MQTT未连接！");return;}
+    // 翻转状态
+    ledState[num] = ledState[num] ? 0 : 1;
+    // UI渲染匹配按钮
+    let uiIndex;
+    if(num === 2) uiIndex = 0; //硬件红灯→UI第一个
+    else if(num === 3) uiIndex = 1; //硬件黄灯→UI第二个
+    else if(num === 1) uiIndex = 2; //硬件绿灯→UI第三个
+    else uiIndex = 3; //硬件蓝灯→UI第四个
+    document.getElementById(ledDomIds[uiIndex]).classList.toggle("active",ledState[num]);
+    // 下发网关标准协议
+    const payload = JSON.stringify({"led":num,"state":ledState[num]});
+    client.publish(TOPIC_LED,payload);
+    addLog("PUB",`${TOPIC_LED} ${payload}`);
+}
+
+// ============ 舵机滑块 ============
+const slider = document.getElementById("servo-slider");
+slider.oninput = function(){
+    const ang = parseInt(this.value);
+    document.getElementById("angle-val").innerText = ang;
+    drawGauge(ang);
+    if(client.connected){
+        const payload = JSON.stringify({"angle":ang});
+        client.publish(TOPIC_SERVO,payload);
+        addLog("PUB",`${TOPIC_SERVO} ${payload}`);
+    }
+}
+</script>
+</body>
+</html>
