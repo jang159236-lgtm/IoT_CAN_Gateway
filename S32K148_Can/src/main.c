@@ -89,7 +89,7 @@ int main(void)
     I2c_Init(&I2c_Config);
 
     Pwm_Init(&Pwm_Config);
-    Servo_SetAngle(150U);
+    Servo_SetAngle(90U);
 
     Can_ControllerStateType state;
     do
